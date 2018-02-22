@@ -1,0 +1,3 @@
+[submodule "libs/libunbrkcore"]
+	path = libs/libunbrkcore
+	url = https://github.com/UnbreakableChain/libunbrkcore.git

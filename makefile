@@ -21,10 +21,12 @@ debug: $(BIN)/libunbrkfio.a
 
 # Build library 
 $(BIN)/libunbrkfio.a: $(OBJ)/ub_fio.o
+	mkdir -p $(BIN)
 	ar rc $@ $^ 
 
 $(OBJ)/ub_fio.o: $(SRC)/ub_fio.c $(LIBS) $(INC)/ub_fio.h $(INC)/ub_io_err.h
-	$(CXX) -I$(LIBS)/ub_core/include -I$(INC) $(CXXFLAGS) -c -o $@ $<
+	mkdir -p $(OBJ)
+	$(CXX) -I$(LIBS)/libunbrkcore/include -I$(INC) $(CXXFLAGS) -c -o $@ $<
 
 
 # Clean
@@ -40,6 +42,10 @@ doc: $(INC)/* $(DOXIFILE)
 # Build and run tests
 tests: $(TESTBIN)/ub_fio_tests
 
-$(TESTBIN)/ub_fio_tests: $(TEST)/ub_fio_tests.c $(INC)/ub_io_err.h debug 
-	$(CXX) -g -I$(INC) -I$(LIBS)/ub_core/include $(CXXFLAGS) -o $@ $< -L$(BIN) -lunbrkfio -L$(LIBS)/ub_core/libs -lunbrkcore $(TESTFLAGS)
+$(TESTBIN)/ub_fio_tests: $(TEST)/ub_fio_tests.c $(INC)/ub_io_err.h debug libs 
+	mkdir -p $(TESTBIN)
+	$(CXX) -g -I$(INC) -I$(LIBS)/libunbrkcore/include $(CXXFLAGS) -o $@ $< -L$(BIN) -lunbrkfio -L$(LIBS)/libunbrkcore/bin -lunbrkcore $(TESTFLAGS)
 	$@ 
+
+libs: $(LIBS)/libunbrkcore/makefile
+	make -C $(LIBS)/libunbrkcore
